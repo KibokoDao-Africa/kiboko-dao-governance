@@ -1,7 +1,5 @@
-"use client";
-
 import { useEffect, useState } from "react";
-import { ethers } from "ethers";
+import { ethers } from "ethers"; // Ensure ethers is at version 6
 import GovernanceAbi from "../../abis/Governance.json";
 import ProposalCard from "../../components/ProposalCard";
 
@@ -18,9 +16,10 @@ export default function Dashboard() {
 
     useEffect(() => {
         async function fetchProposals() {
-            if (typeof window.ethereum !== "undefined") {
-                const provider = new ethers.providers.Web3Provider(window.ethereum);
-                const contract = new ethers.Contract(governanceAddress, GovernanceAbi.abi, provider);
+            if (window.ethereum) {
+                // Initialize the provider with ethers 6 syntax
+                const provider = new ethers.BrowserProvider(window.ethereum);
+                const contract = new ethers.Contract(governanceAddress, GovernanceAbi, provider);
                 const proposalCount = await contract.proposalCount();
                 const loadedProposals: Proposal[] = [];
 
@@ -40,10 +39,10 @@ export default function Dashboard() {
     }, [governanceAddress]);
 
     const voteOnProposal = async (id: number, support: boolean) => {
-        if (typeof window.ethereum !== "undefined") {
-            const provider = new ethers.providers.Web3Provider(window.ethereum);
+        if (window.ethereum) {
+            const provider = new ethers.BrowserProvider(window.ethereum);
             const signer = provider.getSigner();
-            const contract = new ethers.Contract(governanceAddress, GovernanceAbi.abi, signer);
+            const contract = new ethers.Contract(governanceAddress, GovernanceAbi, signer);
             await contract.vote(id, support);
             alert("Vote submitted!");
         }
@@ -52,7 +51,6 @@ export default function Dashboard() {
     return (
         <div>
             <h1 className="text-2xl font-bold mb-4">Governance Dashboard</h1>
-            <button className="bg-highlight text-white px-4 py-2 rounded shadow mb-4">Create Proposal</button>
             <div className="space-y-4">
                 {proposals.map((proposal) => (
                     <ProposalCard key={proposal.id} proposal={proposal} voteOnProposal={voteOnProposal} />
