@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useState } from "react";
 import { ethers } from "ethers"; // Ensure ethers is at version 6
 import GovernanceAbi from "../../abis/Governance.json";
