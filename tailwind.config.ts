@@ -1,19 +1,25 @@
 import type { Config } from "tailwindcss";
 
 const config: Config = {
-  content: [
-    "./pages/**/*.{js,ts,jsx,tsx,mdx}",
-    "./components/**/*.{js,ts,jsx,tsx,mdx}",
-    "./app/**/*.{js,ts,jsx,tsx,mdx}",
-  ],
-  theme: {
-    extend: {
-      colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
-      },
+    content: [
+        "./app/**/*.{js,ts,jsx,tsx}",
+        "./components/**/*.{js,ts,jsx,tsx}",
+    ],
+    theme: {
+        extend: {
+            colors: {
+                primary: "#18163C", // Yankees Blue
+                secondary: "#47217B", // Blue-Violet
+                accent: "#ED058A", // Mexican Pink
+                highlight: "#FB6269", // Pastel Red
+                neutral: "#7DC9CF", // Chinese Silver
+            },
+            fontFamily: {
+                sans: ["Montserrat", "sans-serif"],
+            },
+        },
     },
-  },
-  plugins: [],
+    plugins: [],
 };
+
 export default config;
