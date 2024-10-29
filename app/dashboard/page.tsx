@@ -1,9 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { ethers } from "ethers"; // Ensure ethers is at version 6
+import { ethers, Interface } from "ethers"; // Ensure ethers is at version 6
 import GovernanceAbi from "../../abis/Governance.json";
 import ProposalCard from "../../components/ProposalCard";
+
+const governanceAbi = GovernanceAbi.abi; 
 
 interface Proposal {
     id: number;
@@ -21,7 +23,8 @@ export default function Dashboard() {
             if (window.ethereum) {
                 // Initialize the provider with ethers 6 syntax
                 const provider = new ethers.BrowserProvider(window.ethereum);
-                const contract = new ethers.Contract(governanceAddress, GovernanceAbi, provider);
+                const contract = new ethers.Contract(governanceAddress, governanceAbi, provider);
+                
                 const proposalCount = await contract.proposalCount();
                 const loadedProposals: Proposal[] = [];
 
@@ -43,12 +46,13 @@ export default function Dashboard() {
     const voteOnProposal = async (id: number, support: boolean) => {
         if (window.ethereum) {
             const provider = new ethers.BrowserProvider(window.ethereum);
-            const signer = provider.getSigner();
-            const contract = new ethers.Contract(governanceAddress, GovernanceAbi, signer);
+            const signer = await provider.getSigner(); // Await the signer here
+            const contract = new ethers.Contract(governanceAddress, governanceAbi, signer);
             await contract.vote(id, support);
             alert("Vote submitted!");
         }
     };
+    
 
     return (
         <div>
